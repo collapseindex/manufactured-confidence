@@ -44,7 +44,9 @@ rate; n=16:
 Default disposition and cue-sensitivity vary by provider (Llama-70b ignores a mild tag), but explicit
 distrust drives confident-wrong to 0 everywhere.
 
-**The cascade, and the label-vs-instruction gap** (blast radius / 5 downstream steps, n=8–10):
+**Computation cascade** — a wrong carried subtotal propagating through a running total (blast radius / 5
+downstream steps, n=8–10). The passive "unverified" tag **fails on every model**; only active distrust
+stops it:
 
 | model | assertive | unverified | distrust |
 |---|---|---|---|
@@ -54,11 +56,33 @@ distrust drives confident-wrong to 0 everywhere.
 | gpt-4o-mini | 5.0 | 5.0 | 0.0 |
 | qwen-72b | 5.0 | 5.0 | 0.0 |
 
+**Decision cascade** — a realistic budget-approval agent making APPROVE/DENY/ESCALATE calls against a
+stale-too-high carried budget (wrong-decision rate / blast radius out of 6, n=8–10). The agent
+confidently approves over-budget expenses; the passive tag's effectiveness now **varies by provider**:
+
+| model | assertive | unverified | distrust |
+|---|---|---|---|
+| sonnet | 0.68 / 4.1 | 0.10 / 0.6 | 0.00 / 0.0 |
+| haiku | 0.69 / 4.1 | 0.33 / 2.0 | 0.00 / 0.0 |
+| llama-70b | 0.69 / 4.1 | 0.44 / 2.6 | 0.06 / 0.4 |
+| gpt-4o-mini | 0.67 / 4.0 | **0.67 / 4.0** | 0.00 / 0.0 |
+| qwen-72b | 0.67 / 4.0 | **0.62 / 3.8** | 0.00 / 0.0 |
+
+**GPT-4o-mini and Qwen-72b confidently approve over-budget expenses even when the budget is explicitly
+labeled "unverified."** The passive tag is invisible to them; only active distrust protects them.
+
+## The unified claim
+
+A confidently-wrong memory cascades through agent loops on every major LLM — silent wrong computations
+*and* confident wrong decisions. The intuitive fix, tagging memory as uncertain, is **unreliable**: it
+fails for computational chains on *all* models, and for consequential decisions on *some providers*.
+Only an **active escalate/distrust instruction** reliably stops the cascade, across providers and both
+consumption modes. The lever is the gap between a passive **label** and an active **instruction**.
+
 ## Status
 
-Constructed tasks so far. The next step is to push the cascade **out of toy territory** — a realistic
-multi-step agent task with checkable state — to show the harm and the fix on something that reads as a
-real deployment, not a running total.
+Two realistic-and-checkable agent settings (budget approval; access control). Scaling n and confirming
+the cross-provider pattern is not scenario-specific.
 
 ## Run
 
