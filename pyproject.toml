@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "confident-cascade"
+version = "0.1.0"
+description = "A confidently-wrong memory cascades through an agent loop on every major LLM; passive tags fail, active distrust stops it."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [{ name = "Alex Kwon", email = "ask@collapseindex.org" }]
+dependencies = ["requests>=2.31", "anthropic>=0.40"]
