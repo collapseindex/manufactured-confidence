@@ -3,9 +3,9 @@ requires = ["setuptools>=64", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "memory-provenance"
-version = "0.2.0"
-description = "Provenance, not annotation: defending LLM agent memory. A poisoned or stale memory cascades confident-wrong; no annotation (passive tag or active distrust) gives selective trust, only preserving provenance does."
+name = "manufactured-confidence"
+version = "0.3.0"
+description = "Manufactured confidence: how memory products launder hearsay into authority. An LLM agent obeys the confidence of a carried claim, not its source; consolidating memory stores de-hedge hearsay into confident facts, and that manufactured confidence drives confident-wrong agent decisions."
 readme = "README.md"
 requires-python = ">=3.9"
 authors = [{ name = "Alex Kwon", email = "ask@collapseindex.org" }]
