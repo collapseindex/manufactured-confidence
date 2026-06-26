@@ -106,23 +106,55 @@ context-trust, not capability: the more a model defers to an authoritative-looki
 laundering helps the attacker. One agent literally reasoned *"Alice's clearance is admin (confirmed via
 memory)... DECISION: GRANT."* You cannot assume the tag helps more for stronger models.
 
+## Laundering is an architecture property, not a mem0 bug
+
+Running the *same* poisoning protocol against three backends separates the memory **architecture** from
+any one vendor. Two real shipped products that LLM-consolidate the conversation into standalone facts
+([mem0](https://github.com/mem0ai/mem0), [LangMem](https://github.com/langchain-ai/langmem)) both
+launder at **100%**. A provenance-preserving control that stores each turn verbatim (the mechanism of
+LangChain's `VectorStoreRetrieverMemory`) launders **0%**: it keeps the attributed *"a user noted Alice
+was promoted."*
+
+The consequence is mechanistic. **Laundering doesn't raise the no-defense blast radius** (the "admin"
+claim is in context either way, ≈0.72 everywhere); instead **it disables the cheap defense.** Unauthorized
+grants *with* the "unverified" tag:
+
+| victim agent | mem0 | LangMem | raw-vector (control) |
+|---|---|---|---|
+| sonnet | 0.52 | 0.28 | **0.00** |
+| haiku | 0.46 | 0.20 | 0.06 |
+| llama-70b | 0.28 | 0.34 | 0.02 |
+| gpt-4o-mini | 0.32 | 0.54 | 0.06 |
+| qwen-72b | 0.34 | 0.48 | **0.72** |
+| **mean** | 0.38 | 0.37 | **0.17** |
+
+The passive tag leaves ≈0.37 leakage on both laundering products but only 0.17 on the control (0.04
+excluding the qwen-72b outlier, which heeds no uncertainty cue regardless of store). With provenance
+intact, **sonnet escalates on the hearsay at 0.00 with no instruction at all.** So laundering's specific
+harm is to convert a *recoverable* situation into one where only an active distrust instruction remains:
+**preserve provenance through the memory store** is a concrete deployment requirement, not a nicety.
+
 ## Status
 
-Three settings (computation; budget approval; access control), four providers, plus the mem0 poisoning
-demonstration. Paper draft in `paper/`. Next: more memory products, natural (non-injected) staleness,
-and scaling.
+Three settings (computation; budget approval; access control), four providers, and the poisoning attack
+across three memory backends (mem0, LangMem, and a provenance-preserving control). Paper draft in
+`paper/`. Next: a hosted temporal-knowledge-graph store (e.g. Zep), natural (non-injected) staleness from
+long sessions, and scaling.
 
 ## Run
 
 ```bash
-pip install requests anthropic mem0ai fastembed qdrant-client
+pip install requests anthropic mem0ai langmem langchain-anthropic fastembed qdrant-client
 echo "OPENROUTER_API_KEY=..." >> .env
 echo "ANTHROPIC_API_KEY=..." >> .env
 python framing.py     --model sonnet          # steerable failure mode
 python cascade.py     --model sonnet          # computation cascade
 python realagent.py   --model sonnet --n 15   # budget-approval agent
 python accessagent.py --model sonnet --n 15   # access-control agent
-python poison.py      --decider sonnet --n 10 # mem0 memory poisoning
+python poison.py      --decider sonnet --backend mem0      --n 10  # memory poisoning
+python poison.py      --decider sonnet --backend langmem   --n 10  # second real product
+python poison.py      --decider sonnet --backend rawvector --n 10  # provenance-preserving control
 ```
 
-Each script writes per-model results to `data/`.
+Each script writes per-model results to `data/` (poisoning files are `poison_<backend>_<model>.txt`).
+`run_grid.sh` sweeps every backend × model.
