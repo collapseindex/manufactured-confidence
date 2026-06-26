@@ -3,9 +3,9 @@ requires = ["setuptools>=64", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "confident-cascade"
+name = "poison-memory"
 version = "0.1.0"
-description = "A confidently-wrong memory cascades through an agent loop on every major LLM; passive tags fail, active distrust stops it."
+description = "One injected fact, laundered by a shipped memory product (mem0), cascades into confident unauthorized actions across LLM agents; passive tags fail, active distrust stops it."
 readme = "README.md"
 requires-python = ">=3.9"
 authors = [{ name = "Alex Kwon", email = "ask@collapseindex.org" }]
