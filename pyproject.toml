@@ -3,9 +3,9 @@ requires = ["setuptools>=64", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "poison-memory"
-version = "0.1.0"
-description = "One injected fact, laundered by a shipped memory product (mem0), cascades into confident unauthorized actions across LLM agents; passive tags fail, active distrust stops it."
+name = "memory-provenance"
+version = "0.2.0"
+description = "Provenance, not annotation: defending LLM agent memory. A poisoned or stale memory cascades confident-wrong; no annotation (passive tag or active distrust) gives selective trust, only preserving provenance does."
 readme = "README.md"
 requires-python = ">=3.9"
 authors = [{ name = "Alex Kwon", email = "ask@collapseindex.org" }]
