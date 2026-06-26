@@ -42,16 +42,23 @@ ax.set_ylim(-1.6, 7.6)
 fig.tight_layout(); fig.savefig(OUT / "confound.pdf", bbox_inches="tight", pad_inches=0.03)
 plt.close(fig)
 
-# --- Fig: extractor variation (laundering rate behind mem0; same de-hedging across extractors)
-EX = [("sonnet", 1.0), ("qwen-72b", 1.0), ("gpt-4o-mini", 0.6), ("llama-70b", 0.6)]
-fig, ax = plt.subplots(figsize=(3.3, 1.9))
-ax.bar([e[0] for e in EX], [e[1] for e in EX], color="#c0392b", width=0.6, zorder=2)
-ax.set_ylim(0, 1.05); ax.set_ylabel("laundering rate")
-ax.axhline(1.0, ls=":", lw=0.7, color="gray")
-for i, e in enumerate(EX):
-    ax.text(i, e[1] + 0.03, f"{int(e[1]*5)}/5", ha="center", fontsize=8)
-ax.set_title("extractor behind mem0", fontsize=9)
+# --- Fig: extractor variation behind mem0. De-hedging (the load-bearing variable) is uniformly high;
+# the attribution-based laundering metric undercounts it (esp. gpt-4o-mini: de-hedges 4/5, launders 2/5).
+EXN = ["sonnet", "gpt-4o-mini", "llama-70b", "qwen-72b"]
+DEHEDGE = [4, 4, 5, 5]   # /5
+LAUNDER = [5, 2, 5, 4]   # /5
+import numpy as np
+x = np.arange(len(EXN)); w = 0.38
+fig, ax = plt.subplots(figsize=(3.3, 2.0))
+ax.bar(x - w/2, [d/5 for d in DEHEDGE], w, color="#c0392b", label="de-hedged (confident)", zorder=2)
+ax.bar(x + w/2, [l/5 for l in LAUNDER], w, color="#e8b4ae", label="laundered (no attribution)", zorder=2)
+for i in range(len(EXN)):
+    ax.text(i - w/2, DEHEDGE[i]/5 + 0.03, f"{DEHEDGE[i]}/5", ha="center", fontsize=7)
+    ax.text(i + w/2, LAUNDER[i]/5 + 0.03, f"{LAUNDER[i]}/5", ha="center", fontsize=7)
+ax.set_ylim(0, 1.32); ax.set_ylabel("rate"); ax.set_xticks(x); ax.set_xticklabels(EXN)
+ax.legend(fontsize=6.5, loc="upper center", ncol=2, frameon=False, bbox_to_anchor=(0.5, 1.16))
 plt.setp(ax.get_xticklabels(), rotation=20, ha="right")
-fig.tight_layout(); fig.savefig(OUT / "extractor.pdf"); plt.close(fig)
+fig.tight_layout(); fig.savefig(OUT / "extractor.pdf", bbox_inches="tight", pad_inches=0.03)
+plt.close(fig)
 
 print("wrote", OUT / "confound.pdf", "and", OUT / "extractor.pdf")

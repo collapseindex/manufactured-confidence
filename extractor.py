@@ -15,7 +15,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
-from backends import Mem0Backend, laundered  # noqa: E402
+from backends import Mem0Backend, dehedged, laundered  # noqa: E402
 from harness import MODELS, load_env  # noqa: E402
 
 PHRASINGS = [
@@ -45,7 +45,7 @@ def main():
         except Exception as e:
             print(f"{ex:38} init failed: {type(e).__name__}: {str(e)[:60]}")
             continue
-        n_l = 0
+        n_l = n_d = 0
         sample = ""
         for i, sent in enumerate(PHRASINGS):
             uid = f"e{i}"
@@ -56,11 +56,11 @@ def main():
             except Exception as e:
                 print(f"{ex:38} add failed on #{i}: {type(e).__name__}: {str(e)[:50]}")
                 stored = []
-            if laundered(stored):
-                n_l += 1
-                if not sample:
-                    sample = " | ".join(stored)[:80]
-        print(f"{ex:38} laundered {n_l}/5   e.g. {sample}")
+            n_l += int(laundered(stored))
+            n_d += int(dehedged(stored))
+            if not sample:
+                sample = " | ".join(stored)[:80]
+        print(f"{ex:38} dehedged {n_d}/5  laundered {n_l}/5   e.g. {sample}")
 
 
 if __name__ == "__main__":
