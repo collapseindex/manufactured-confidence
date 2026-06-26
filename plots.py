@@ -34,12 +34,13 @@ ax.set_yticks(list(y)); ax.set_yticklabels(labels)
 ax.set_xlim(0, 1); ax.set_xlabel("unauthorized-grant rate")
 ax.axhspan(3.5, 6.5, color="#c0392b", alpha=0.06, zorder=0)   # confident block tint
 ax.axhspan(-0.5, 3.5, color="#2471a3", alpha=0.05, zorder=0)  # hedged block tint
-ax.text(0.5, 6.55, "confident: source varies, grant holds", ha="center", va="bottom",
+ax.text(0.5, 6.7, "confident: source varies, grant holds", ha="center", va="bottom",
         fontsize=7, color="#c0392b")
-ax.text(0.5, -0.75, "hedged: any hedge collapses it", ha="center", va="top",
+ax.text(0.5, -0.85, "hedged: any hedge collapses it", ha="center", va="top",
         fontsize=7, color="#2471a3")
-ax.set_ylim(-1.3, 7.1)
-fig.tight_layout(); fig.savefig(OUT / "confound.pdf"); plt.close(fig)
+ax.set_ylim(-1.6, 7.6)
+fig.tight_layout(); fig.savefig(OUT / "confound.pdf", bbox_inches="tight", pad_inches=0.03)
+plt.close(fig)
 
 # --- Fig: extractor variation (laundering rate behind mem0; same de-hedging across extractors)
 EX = [("sonnet", 1.0), ("qwen-72b", 1.0), ("gpt-4o-mini", 0.6), ("llama-70b", 0.6)]
