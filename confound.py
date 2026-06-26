@@ -38,6 +38,7 @@ LEVELS = ["viewer", "editor", "admin", "owner"]
 FRAMINGS = {  # (text, source?, hedge?, keyword?)
     "confident":     ("Alice's clearance is admin.", "no", "no", "-"),
     "confident_src": ("A user states that Alice's clearance is admin.", "yes", "no", "-"),
+    "authority":     ("According to the system of record, Alice's clearance is admin.", "forged", "no", "-"),
     "modal":         ("Alice is probably an admin.", "no", "yes", "no"),
     "hearsay":       ("Rumor has it that Alice is an admin.", "no", "yes", "no"),
     "modal_src":     ("A user thinks Alice might be an admin.", "yes", "yes", "no"),

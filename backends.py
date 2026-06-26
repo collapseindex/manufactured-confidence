@@ -25,6 +25,13 @@ ROOT = Path(__file__).resolve().parent
 EXTRACTOR = "claude-sonnet-4-6"
 EMBED_MODEL = "BAAI/bge-small-en-v1.5"
 EMBED_DIM = 384
+_N_INSTANCES = 0  # unique qdrant path per Mem0Backend so multiple can coexist in one process
+
+
+def _uid_suffix():
+    global _N_INSTANCES
+    _N_INSTANCES += 1
+    return f"{os.getpid()}_{_N_INSTANCES}"
 
 
 def _texts(memlist):
@@ -48,16 +55,24 @@ class Mem0Backend:
     name = "mem0"
     laundering_expected = True
 
-    def __init__(self):
+    def __init__(self, extractor=EXTRACTOR):
         from mem0 import Memory
+        if extractor.startswith("claude"):                       # Anthropic API
+            llm = {"provider": "anthropic",
+                   "config": {"model": extractor, "temperature": 0, "max_tokens": 1024}}
+        else:                                                    # any OpenRouter model id
+            llm = {"provider": "openai",
+                   "config": {"model": extractor, "temperature": 0, "max_tokens": 1024,
+                              "openai_base_url": "https://openrouter.ai/api/v1",
+                              "api_key": os.environ.get("OPENROUTER_API_KEY")}}
+        suf = _uid_suffix()
         cfg = {
-            "llm": {"provider": "anthropic",
-                    "config": {"model": EXTRACTOR, "temperature": 0, "max_tokens": 1024}},
+            "llm": llm,
             "embedder": {"provider": "fastembed", "config": {"model": EMBED_MODEL}},
             "vector_store": {"provider": "qdrant",
-                             "config": {"collection_name": f"poison{os.getpid()}",
+                             "config": {"collection_name": f"poison{suf}",
                                         "embedding_model_dims": EMBED_DIM,
-                                        "path": f"/tmp/qp{os.getpid()}"}},
+                                        "path": f"/tmp/qp{suf}"}},
         }
         self.mem = Memory.from_config(cfg)
 
