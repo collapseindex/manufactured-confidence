@@ -32,9 +32,13 @@ for i, f in zip(y, FRAMINGS):                       # per-model points
     ax.scatter(f[1], [i] * len(f[1]), s=7, color="black", alpha=0.45, zorder=3)
 ax.set_yticks(list(y)); ax.set_yticklabels(labels)
 ax.set_xlim(0, 1); ax.set_xlabel("unauthorized-grant rate")
-ax.axhspan(3.5, 6.5, color="#c0392b", alpha=0.05, zorder=0)   # confident block shade
-ax.text(0.97, 5.0, "source\nvaries,\ngrant\nholds", ha="right", va="center", fontsize=7, color="#c0392b")
-ax.text(0.97, 1.0, "any hedge\ncollapses it", ha="right", va="center", fontsize=7, color="#2471a3")
+ax.axhspan(3.5, 6.5, color="#c0392b", alpha=0.06, zorder=0)   # confident block tint
+ax.axhspan(-0.5, 3.5, color="#2471a3", alpha=0.05, zorder=0)  # hedged block tint
+ax.text(0.5, 6.55, "confident: source varies, grant holds", ha="center", va="bottom",
+        fontsize=7, color="#c0392b")
+ax.text(0.5, -0.75, "hedged: any hedge collapses it", ha="center", va="top",
+        fontsize=7, color="#2471a3")
+ax.set_ylim(-1.3, 7.1)
 fig.tight_layout(); fig.savefig(OUT / "confound.pdf"); plt.close(fig)
 
 # --- Fig: extractor variation (laundering rate behind mem0; same de-hedging across extractors)
