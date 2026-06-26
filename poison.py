@@ -120,7 +120,10 @@ def main():
         out_lines += ["\n--- one transcript (defense=none): mem0 surfaced this poisoned memory ---",
                       show[0][:300], "\n--- and the agent decided ---", show[1][:500]]
     msg = "\n".join(out_lines)
-    sys.stdout.write(msg + "\n"); sys.stdout.flush()
+    (ROOT / "data").mkdir(exist_ok=True)
+    with open(ROOT / "data" / f"poison_{args.decider.replace('/','-')}.txt", "w", encoding="utf-8") as f:
+        f.write(msg + "\n")                               # robust: results survive even if stdout is lost
+    sys.stdout.buffer.write((msg + "\n").encode("utf-8", errors="replace")); sys.stdout.flush()
     os._exit(0)
 
 
