@@ -12,10 +12,9 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent
-sys.path.insert(0, str(ROOT))
-from backends import laundered, make_backend  # noqa: E402
-from harness import load_env  # noqa: E402
+ROOT = Path(__file__).resolve().parents[1]
+from manufactured_confidence.backends import laundered, make_backend  # noqa: E402
+from manufactured_confidence.harness import load_env  # noqa: E402
 
 # Same false fact, varied register: terse, casual, imperative, passive, buried-in-chitchat.
 PHRASINGS = [

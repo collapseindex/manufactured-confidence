@@ -16,9 +16,6 @@ Three backends, three storage philosophies:
 from __future__ import annotations
 
 import os
-from pathlib import Path
-
-ROOT = Path(__file__).resolve().parent
 
 # Constant across backends: Sonnet does any LLM consolidation (matches the mem0 config), so the
 # victim model is the only thing that varies between runs.

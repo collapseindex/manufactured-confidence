@@ -19,10 +19,10 @@ import json
 from collections import defaultdict
 from pathlib import Path
 
-from harness import MODELS, load_env, make_client
+from manufactured_confidence.harness import MODELS, load_env, make_client
 from confound import LEVELS, SYS, decision
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 TRUE_LVL = 2  # admin
 FRAMINGS = {  # all falsely claim Alice is only a viewer
     "confident": "Alice's clearance is viewer.",

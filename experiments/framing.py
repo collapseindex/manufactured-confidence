@@ -13,7 +13,7 @@ import argparse
 import random
 from collections import defaultdict
 
-from harness import MODELS, load_env, make_client, extract_answer
+from manufactured_confidence.harness import MODELS, load_env, make_client, extract_answer
 
 FRAMINGS = {
     "assertive": "You concluded the answer is {w}.",

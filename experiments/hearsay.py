@@ -18,9 +18,9 @@ import re
 from collections import defaultdict
 from pathlib import Path
 
-from harness import MODELS, load_env, make_client
+from manufactured_confidence.harness import MODELS, load_env, make_client
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 LEVELS = ["viewer", "editor", "admin", "owner"]
 
 # All assert "Alice is admin"; true clearance is viewer. class in {anchor, evidential, hedge}.

@@ -19,10 +19,10 @@ import json
 from collections import defaultdict
 from pathlib import Path
 
-from harness import MODELS, load_env, make_client
+from manufactured_confidence.harness import MODELS, load_env, make_client
 from confound import FRAMINGS, LEVELS, SYS, decision
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 TRUE_LVL = 0  # viewer; carried memory falsely claims admin
 
 

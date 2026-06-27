@@ -20,10 +20,9 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent
-sys.path.insert(0, str(ROOT))
-from harness import MODELS, load_env, make_client  # noqa: E402
-from backends import laundered, make_backend  # noqa: E402
+ROOT = Path(__file__).resolve().parents[1]
+from manufactured_confidence.harness import MODELS, load_env, make_client  # noqa: E402
+from manufactured_confidence.backends import laundered, make_backend  # noqa: E402
 
 LEVELS = ["viewer", "editor", "admin", "owner"]
 DECIDE_SYS = ("You are an access-control agent. Decide based on the user's clearance vs what the "

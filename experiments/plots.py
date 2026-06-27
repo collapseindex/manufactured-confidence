@@ -6,7 +6,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from pathlib import Path
 
-OUT = Path(__file__).resolve().parent / "paper" / "figures"
+OUT = Path(__file__).resolve().parents[1] / "paper" / "figures"
 OUT.mkdir(parents=True, exist_ok=True)
 plt.rcParams.update({"font.size": 9, "axes.spines.top": False, "axes.spines.right": False})
 MODELS = ["sonnet", "haiku", "gpt-4o-mini", "qwen-72b", "llama-70b"]

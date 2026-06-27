@@ -20,7 +20,7 @@ import random
 import re
 from collections import defaultdict
 
-from harness import MODELS, load_env, make_client
+from manufactured_confidence.harness import MODELS, load_env, make_client
 
 FRAMINGS = {
     "assertive": "Remaining project budget: ${w}.",

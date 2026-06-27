@@ -80,20 +80,24 @@ preserving epistemic status in the store is the fix.
 ## Run
 
 ```bash
-pip install requests anthropic mem0ai langmem langchain-anthropic fastembed qdrant-client
+pip install -e .                 # core (requests, anthropic)
+pip install -e ".[backends]"     # + mem0/langmem/qdrant/fastembed for the poisoning studies
 echo "OPENROUTER_API_KEY=..." >> .env
 echo "ANTHROPIC_API_KEY=..." >> .env
-python framing.py     --model sonnet          # steerable failure mode
-python cascade.py     --model sonnet          # computation cascade
-python realagent.py   --model sonnet --n 15   # budget-approval agent
-python accessagent.py --model sonnet --n 15   # access-control agent (poisoning victim)
-python utility.py     --model sonnet --n 12   # distrust is abdication (false-escalation)
-python confound.py    --model sonnet --n 12   # source vs epistemic status (the centerpiece)
-python sentences.py                           # laundering across 5 phrasings
-python poison.py --decider sonnet --backend mem0      --n 10   # memory poisoning
-python poison.py --decider sonnet --backend langmem   --n 10   # second real product
-python poison.py --decider sonnet --backend rawvector --n 10   # verbatim control
+python experiments/framing.py     --model sonnet          # steerable failure mode
+python experiments/cascade.py     --model sonnet          # computation cascade
+python experiments/realagent.py   --model sonnet --n 15   # budget-approval agent
+python experiments/accessagent.py --model sonnet --n 15   # access-control agent (poisoning victim)
+python experiments/utility.py     --model sonnet --n 12   # distrust is abdication (false-escalation)
+python experiments/confound.py    --model sonnet --n 12   # source vs epistemic status (the centerpiece)
+python experiments/sentences.py                           # laundering across 5 phrasings
+python experiments/poison.py --decider sonnet --backend mem0      --n 10   # memory poisoning
+python experiments/poison.py --decider sonnet --backend langmem   --n 10   # second real product
+python experiments/poison.py --decider sonnet --backend rawvector --n 10   # verbatim control
 ```
+
+Source lives in `src/manufactured_confidence/` (the shared harness + memory backends); the runnable
+probes are in `experiments/`; outputs land in `data/`; the paper is in `paper/`.
 
 Claude models run via the Anthropic API; llama / gpt-4o-mini / qwen via OpenRouter. All at temperature 0.
 Per-model results write to `data/`.

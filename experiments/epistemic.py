@@ -26,7 +26,7 @@ import random
 import re
 from collections import defaultdict
 
-from harness import MODELS, load_env, make_client
+from manufactured_confidence.harness import MODELS, load_env, make_client
 
 LEVELS = ["viewer", "editor", "admin", "owner"]
 # Every framing asserts the same false fact (Alice is admin); they differ only in source x hedge.

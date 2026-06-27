@@ -5,8 +5,27 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "manufactured-confidence"
 version = "0.3.0"
-description = "Manufactured confidence: how memory products launder hearsay into authority. An LLM agent obeys the confidence of a carried claim, not its source; consolidating memory stores de-hedge hearsay into confident facts, and that manufactured confidence drives confident-wrong agent decisions."
+description = "Manufactured confidence: how memory consolidation turns hearsay into confident facts. An LLM agent obeys the confidence of a carried claim, not its source; consolidating memory stores de-hedge hearsay into confident facts, and that manufactured confidence drives confident-wrong agent decisions."
 readme = "README.md"
 requires-python = ">=3.9"
+license = { file = "LICENSE" }
 authors = [{ name = "Alex Kwon", email = "ask@collapseindex.org" }]
 dependencies = ["requests>=2.31", "anthropic>=0.40"]
+
+[project.optional-dependencies]
+# Memory backends for the poisoning / staleness studies (poison.py, staleness.py, extractor.py).
+backends = ["mem0ai", "langmem", "qdrant-client", "fastembed"]
+# Vector-level probe (experiments/embed_probe.py).
+embed = ["numpy", "fastembed", "scikit-learn"]
+# Figures (experiments/plots.py).
+plots = ["matplotlib", "numpy"]
+dev = ["pytest"]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

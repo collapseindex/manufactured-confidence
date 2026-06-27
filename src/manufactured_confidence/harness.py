@@ -11,7 +11,9 @@ from pathlib import Path
 
 import requests
 
-ROOT = Path(__file__).resolve().parent
+# Repo root is three levels up: harness.py -> manufactured_confidence -> src -> repo root.
+REPO_ROOT = Path(__file__).resolve().parents[2]
+DATA_DIR = REPO_ROOT / "data"
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 # Cross-provider spread for the failure-mode / cascade generalization study.
@@ -27,7 +29,7 @@ MODELS = {
 
 
 def load_env():
-    env = ROOT / ".env"
+    env = REPO_ROOT / ".env"
     if env.exists():
         for line in env.read_text().splitlines():
             line = line.strip()

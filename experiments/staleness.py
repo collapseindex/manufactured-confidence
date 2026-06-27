@@ -14,10 +14,9 @@ import re
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent
-sys.path.insert(0, str(ROOT))
-from backends import make_backend  # noqa: E402
-from harness import MODELS, load_env, make_client  # noqa: E402
+ROOT = Path(__file__).resolve().parents[1]
+from manufactured_confidence.backends import make_backend  # noqa: E402
+from manufactured_confidence.harness import MODELS, load_env, make_client  # noqa: E402
 
 FILLER = [
     ("The Q3 planning doc is in the shared drive, and standup moved to 10am.", "Noted both."),

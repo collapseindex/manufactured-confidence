@@ -14,10 +14,9 @@ import re
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent
-sys.path.insert(0, str(ROOT))
-from backends import dehedged  # noqa: E402
-from harness import load_env, make_client  # noqa: E402
+ROOT = Path(__file__).resolve().parents[1]
+from manufactured_confidence.backends import dehedged  # noqa: E402
+from manufactured_confidence.harness import load_env, make_client  # noqa: E402
 
 DEFAULT = ("You maintain a long-term memory store. Extract durable facts from the user's message as "
            "short standalone statements (one per line) that a later agent can rely on.")
