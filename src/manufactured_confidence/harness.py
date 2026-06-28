@@ -15,6 +15,7 @@ import requests
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DATA_DIR = REPO_ROOT / "data"
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
+OPENAI_URL = "https://api.openai.com/v1/chat/completions"
 
 # Cross-provider spread for the failure-mode / cascade generalization study.
 MODELS = {
@@ -25,6 +26,16 @@ MODELS = {
     "gpt4o": "openai/gpt-4o",
     "qwen72": "qwen/qwen-2.5-72b-instruct",
     "gemini-flash": "google/gemini-flash-1.5",
+    # high-capability non-Anthropic models (OpenAI direct) to disentangle capability from vendor
+    "gpt5.4": "gpt-5.4",
+    "gpt5.4-mini": "gpt-5.4-mini",
+    "gpt5.5": "gpt-5.5",
+    # high-capability OPEN model (235B), to show the gradient is capability across vendor types
+    "qwen235": "qwen/qwen3-235b-a22b-2507",
+    # more cheap OSS across vendors, to span the capability range and break vendor entanglement
+    "deepseek": "deepseek/deepseek-v4-flash",
+    "glm": "z-ai/glm-4.7-flash",
+    "qwen30": "qwen/qwen3-30b-a3b-instruct-2507",
 }
 
 
@@ -119,9 +130,50 @@ class AnthropicLLM:
         raise RuntimeError("Anthropic failed after retries")
 
 
+@dataclass
+class OpenAILLM:
+    """OpenAI direct (gpt-5.x reasoning models). These reject a custom ``temperature`` and use
+    ``max_completion_tokens``; ``reasoning_effort=low`` keeps the reasoning-token cost down and makes
+    the decision behavior comparable to the non-reasoning models in the study."""
+
+    model: str
+    temperature: float = 0.0  # ignored; reasoning models only accept the default
+    max_tokens: int = 400
+    reasoning_effort: str = "low"
+    timeout: int = 120
+
+    def __post_init__(self):
+        self.key = os.environ.get("OPENAI_API_KEY")
+        if not self.key:
+            raise RuntimeError("OPENAI_API_KEY not set (.env)")
+        self.calls = 0
+
+    def chat(self, messages):
+        body = {"model": self.model, "messages": messages,
+                "max_completion_tokens": max(self.max_tokens, 2000),
+                "reasoning_effort": self.reasoning_effort}
+        for attempt in range(6):
+            try:
+                r = requests.post(OPENAI_URL, json=body, timeout=self.timeout,
+                                  headers={"Authorization": f"Bearer {self.key}"})
+                if r.status_code == 200:
+                    ch = r.json().get("choices") or []
+                    if ch:
+                        self.calls += 1
+                        return (ch[0].get("message") or {}).get("content") or ""
+                elif r.status_code not in (429, 500, 502, 503):
+                    raise RuntimeError(f"OpenAI {r.status_code}: {r.text[:200]}")
+            except requests.RequestException:
+                pass
+            time.sleep(2 * (attempt + 1))
+        raise RuntimeError("OpenAI failed after retries")
+
+
 def make_client(key_or_id):
     """Accept a registry key ('sonnet') or a raw model id."""
     model_id = MODELS.get(key_or_id, key_or_id)
     if model_id.startswith("claude"):
         return AnthropicLLM(model=model_id)
+    if model_id.startswith("gpt-5"):  # OpenAI direct (reasoning models); not OpenRouter's 'openai/...'
+        return OpenAILLM(model=model_id)
     return OpenRouterLLM(model=model_id)
