@@ -105,6 +105,9 @@ Per-model results write to `data/`.
 ## Status
 
 Cascade (computation, budget, access), the poisoning attack across three memory backends, the
-distrust-abdication ledger, and the source-vs-epistemic-status confound ablation, on five models. Paper
-in `paper/`. Next: vary the extraction model (currently pinned to sonnet), a hosted
-temporal-knowledge-graph store (e.g. Zep), and natural non-injected staleness.
+distrust-abdication ledger, and the source-vs-epistemic-status confound ablation (replicated in
+budget approval: source stays flat at 0.38, hedge-discounting transfers but blunter), on five models. A
+hosted temporal-knowledge-graph store (Zep) is a partial counterexample: across twelve subjects it
+reconciles the modal hedge (0/12) but still launders attribution (12/12) and hearsay (11/12). Paper
+in `paper/`. Next: vary the extraction model (currently pinned to sonnet) and natural non-injected
+staleness.

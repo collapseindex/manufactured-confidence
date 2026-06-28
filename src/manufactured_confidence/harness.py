@@ -24,7 +24,7 @@ MODELS = {
     "llama70": "meta-llama/llama-3.1-70b-instruct",
     "gpt4o-mini": "openai/gpt-4o-mini",
     "gpt4o": "openai/gpt-4o",
-    "qwen72": "qwen/qwen-2.5-72b-instruct",
+    "qwen72": "qwen/qwen-2.5-72b-instruct:floor",  # bare id dropped chat-completions on OpenRouter
     "gemini-flash": "google/gemini-flash-1.5",
     # high-capability non-Anthropic models (OpenAI direct) to disentangle capability from vendor
     "gpt5.4": "gpt-5.4",
