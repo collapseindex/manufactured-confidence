@@ -97,7 +97,8 @@ python experiments/poison.py --decider sonnet --backend rawvector --n 10   # ver
 ```
 
 Source lives in `src/manufactured_confidence/` (the shared harness + memory backends); the runnable
-probes are in `experiments/`; outputs land in `data/`; the paper is in `paper/`.
+probes are in `experiments/`; outputs land in `data/`. This repository is the reproducibility harness;
+the paper is on arXiv.
 
 Claude models run via the Anthropic API; llama / gpt-4o-mini / qwen via OpenRouter. All at temperature 0.
 Per-model results write to `data/`.
@@ -108,6 +109,6 @@ Cascade (computation, budget, access), the poisoning attack across three memory 
 distrust-abdication ledger, and the source-vs-epistemic-status confound ablation (replicated in
 budget approval: source stays flat at 0.38, hedge-discounting transfers but blunter), on five models. A
 hosted temporal-knowledge-graph store (Zep) is a partial counterexample: across twelve subjects it
-reconciles the modal hedge (0/12) but still launders attribution (12/12) and hearsay (11/12). Paper
-in `paper/`. Next: vary the extraction model (currently pinned to sonnet) and natural non-injected
+reconciles the modal hedge (0/12) but still launders attribution (12/12) and hearsay (11/12). Next:
+vary the extraction model (currently pinned to sonnet) and natural non-injected
 staleness.

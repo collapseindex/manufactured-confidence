@@ -15,3 +15,6 @@ paper/*.pdf
 paper/*.synctex.gz
 paper/*.fdb_latexmk
 paper/*.fls
+
+# paper lives on arXiv, not in this code repo
+paper/
