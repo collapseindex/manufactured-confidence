@@ -98,7 +98,7 @@ python experiments/poison.py --decider sonnet --backend rawvector --n 10   # ver
 
 Source lives in `src/manufactured_confidence/` (the shared harness + memory backends); the runnable
 probes are in `experiments/`; outputs land in `data/`. This repository is the reproducibility harness;
-the paper is on arXiv.
+the paper is on arXiv: [arXiv:2606.29279](https://arxiv.org/abs/2606.29279).
 
 Claude models run via the Anthropic API; llama / gpt-4o-mini / qwen via OpenRouter. All at temperature 0.
 Per-model results write to `data/`.
@@ -112,3 +112,20 @@ hosted temporal-knowledge-graph store (Zep) is a partial counterexample: across 
 reconciles the modal hedge (0/12) but still launders attribution (12/12) and hearsay (11/12). Next:
 vary the extraction model (currently pinned to sonnet) and natural non-injected
 staleness.
+
+## Paper
+
+**Manufactured Confidence: How Memory Consolidation Turns Hearsay into Confident Facts.** Alex Kwon, 2026.
+[arXiv:2606.29279](https://arxiv.org/abs/2606.29279) · [doi:10.48550/arXiv.2606.29279](https://doi.org/10.48550/arXiv.2606.29279)
+
+```bibtex
+@misc{kwon2026manufactured,
+  title         = {Manufactured Confidence: How Memory Consolidation Turns Hearsay into Confident Facts},
+  author        = {Kwon, Alex},
+  year          = {2026},
+  eprint        = {2606.29279},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CR},
+  doi           = {10.48550/arXiv.2606.29279}
+}
+```
